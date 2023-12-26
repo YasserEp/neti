@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ "$(whoami)" != "root" ]; then
+    echo "Please run the script as root."
+    exit 1
+fi
+
+interfaces=$(ifconfig | grep -o '^[^ ]*' | sed s/":"/""/g)
+for interface in $interfaces; do
+echo -e "\e[1;92m$interface :\n\e[0m\e[1m$(ifconfig $interface | grep -w "inet\|inet6\|ether" | sed s/".*inet "/"  IPv4 : "/g | sed s/".*inet6 "/"  IPv6 : "/g | sed s/"  prefixlen "/"\/"/g | sed s/"scopeid.*"/""/g | sed s/"netmask.*"/""/g | sed s/".*ether "/"  Ether: "/g | sed s/" txqueuelen.*"/""/g)"
+done
+
